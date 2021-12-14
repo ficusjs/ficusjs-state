@@ -3,10 +3,27 @@ class BasePersist {
    * Create an instance of persistence with the unique namespace identifier
    * @param {string} namespace
    * @param {object} storage
+   * @param {object} options
    */
-  constructor (namespace, storage) {
+  constructor (namespace, storage, options = {}) {
     this.namespace = namespace
     this.storage = storage
+    this.options = options
+    this._init()
+  }
+
+  /**
+   * Private method for initializing
+   * @private
+   */
+  _init () {
+    if ('performance' in globalThis && this.options.clearOnReload) {
+      const entries = globalThis.performance.getEntriesByType('navigation').map(e => e.type)
+      const lastUpdated = this.lastUpdated()
+      if (lastUpdated && entries.includes('reload')) {
+        this.removeState()
+      }
+    }
   }
 
   /**
@@ -15,7 +32,7 @@ class BasePersist {
    */
   setState (state) {
     if (state) {
-      this.storage.setItem(`${this.namespace}:state`, typeof state === 'string' ? state : JSON.stringify(state))
+      this.storage.setItem(`${this.namespace}:state`, this._normalizeState(state))
       this.storage.setItem(`${this.namespace}:lastUpdated`, new Date().getTime().toString())
     } else {
       this.removeState()
@@ -23,8 +40,23 @@ class BasePersist {
   }
 
   /**
-   * Get state from the persistence store
+   * Normalize state before persisting
+   * @param state
    * @returns {string}
+   * @private
+   */
+  _normalizeState (state) {
+    if (typeof state === 'object' && (this.options.saveState && typeof this.options.saveState === 'function')) {
+      return JSON.stringify(this.options.saveState(state))
+    } else if (typeof state !== 'string') {
+      return JSON.stringify(state)
+    }
+    return state
+  }
+
+  /**
+   * Get state from the persistence store
+   * @returns {*}
    */
   getState () {
     const state = this.storage.getItem(`${this.namespace}:state`)
@@ -53,11 +85,14 @@ class BasePersist {
  * Function to create persistence for the store
  * @param {string} namespace
  * @param {string} storageName
+ * @param {object} options
  * @returns {BasePersist}
  */
-export function createPersist (namespace, storageName = 'session') {
+function createPersist (namespace, storageName = 'session', options) {
   if (storageName === 'local') {
-    return new BasePersist(namespace, globalThis.localStorage)
+    return new BasePersist(namespace, globalThis.localStorage, options)
   }
-  return new BasePersist(namespace, globalThis.sessionStorage)
+  return new BasePersist(namespace, globalThis.sessionStorage, options)
 }
+
+export { BasePersist, createPersist }

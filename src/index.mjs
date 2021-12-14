@@ -1,5 +1,5 @@
 import { createAppState, getAppState } from './app-state.mjs'
-import { createPersist } from './base-persist.mjs'
+import { BasePersist, createPersist } from './base-persist.mjs'
 import { createStateMachine } from './state-machine.mjs'
 import { withLocalState } from './with-local-state.mjs'
 import { withStateMachine } from './with-state-machine.mjs'
@@ -9,6 +9,7 @@ import { withWorkerStore } from './with-worker-store.mjs'
 import { Store } from './store.mjs'
 
 export {
+  BasePersist,
   createAppState,
   createPersist,
   getAppState,
