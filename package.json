@@ -1,16 +1,16 @@
 {
   "name": "@ficusjs/state",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "State functions for FicusJS",
   "type": "module",
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",
   "types": "types/index.d.ts",
-  "sideEffects": false,
   "scripts": {
     "build": "run-p build:*",
     "build:all": "rollup -i src/index.mjs -o dist/index.mjs -f es -p \"node-resolve={}\" -p \"terser={mangle: { keep_fnames: true, toplevel: true, module: true }}\" -p \"filesize={}\"",
     "build:app-state": "rollup -i src/app-state.mjs -o dist/app-state.mjs -f es -p \"terser={mangle: { keep_fnames: true, toplevel: true, module: true }}\" -p \"filesize={}\"",
+    "build:persist": "rollup -i src/base-persist.mjs -o dist/persist.mjs -f es -p \"terser={mangle: { keep_fnames: true, toplevel: true, module: true }}\" -p \"filesize={}\"",
     "build:worker-app-state": "rollup -i src/worker-app-state.mjs -o dist/worker-app-state.iife.js -f iife -p \"terser={}\" -p \"filesize={}\"",
     "build:with-store": "rollup -i src/with-store.mjs -o dist/with-store.mjs -f es -p \"terser={mangle: { keep_fnames: true, toplevel: true, module: true }}\" -p \"filesize={}\"",
     "build:with-worker-store": "rollup -i src/with-worker-store.mjs -o dist/with-worker-store.mjs -f es -p \"terser={mangle: { keep_fnames: true, toplevel: true, module: true }}\" -p \"filesize={}\"",
@@ -104,6 +104,9 @@
     },
     "./store": {
       "import": "./dist/store.mjs"
+    },
+    "./persist": {
+      "import": "./dist/persist.mjs"
     }
   }
 }
