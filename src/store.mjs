@@ -240,7 +240,7 @@ export class Store {
     }
 
     // A valid function, so it belongs in our collection
-    this.callbacks.push(callback)
+    if (!this.callbacks.includes(callback)) this.callbacks.push(callback)
 
     return unsubscribe
   }
