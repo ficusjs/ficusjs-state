@@ -44,9 +44,42 @@ test('setState change nested object', t => {
   t.deepEqual(store.state.test2, 'test3')
 })
 
-test('getState property', t => {
+test('getState with string', t => {
   store.setState(() => ({ nested: { prop1: null, prop2: 'test2' }, test2: 'test3' }))
   t.is(store.getState('nested.prop2'), 'test2')
+})
+
+test('getState with function', t => {
+  store.setState(() => ({ nested: { prop1: null, prop2: 'test2' }, test2: 'test3' }))
+  const callback = sinon.spy()
+  const getter = function (state) {
+    callback()
+    return state.nested.prop2
+  }
+  t.is(store.getState(getter), 'test2')
+  t.is(store.getState(getter), 'test2')
+  t.is(store.getState(getter), 'test2')
+  t.truthy(callback.called)
+  t.is(callback.callCount, 1)
+})
+
+test('getState with function projection', t => {
+  store.setState(() => ({ nested: { prop1: null, prop2: 'test2' }, test2: 'test3' }))
+  const callback = sinon.spy()
+  const expected = {
+    prop1: null,
+    prop2: 'test2',
+    test3: 'test3'
+  }
+  const getter = function (state) {
+    callback()
+    return { ...state.nested, test3: 'test3' }
+  }
+  t.deepEqual(store.getState(getter), expected)
+  t.deepEqual(store.getState(getter), expected)
+  t.deepEqual(store.getState(getter), expected)
+  t.truthy(callback.called)
+  t.is(callback.callCount, 1)
 })
 
 test('clear the store', t => {

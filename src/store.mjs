@@ -177,21 +177,26 @@ export class Store {
 
   /**
    * A method to return state
-   * @param {string} key
-   * @returns {undefined|*}
+   * @param {string|function} key
+   * @returns {*}
    */
   getState (key) {
-    // If path is not defined or it has false value
-    if (!key) return undefined
+    // if key is not defined
+    if (!key || (typeof key !== 'string' && typeof key !== 'function')) return undefined
 
     // check the getter cache first
     if (!this.getterCache[key]) {
-      // Check if path is string or array. Regex : ensure that we do not have '.' and brackets.
-      // Regex explained: https://regexr.com/58j0k
-      const keyArray = Array.isArray(key) ? key : key.match(/([^[.\]])+/g)
+      let result
+      if (typeof key === 'function') {
+        result = key(this.state)
+      } else {
+        // Check if path is string or array. Regex : ensure that we do not have '.' and brackets.
+        // Regex explained: https://regexr.com/58j0k
+        const keyArray = Array.isArray(key) ? key : key.match(/([^[.\]])+/g)
 
-      // get the result
-      const result = keyArray.reduce((prevObj, key) => prevObj && prevObj[key], this.state)
+        // get the result
+        result = keyArray.reduce((prevObj, key) => prevObj && prevObj[key], this.state)
+      }
 
       // if the result is not defined
       if (result == null) return undefined
