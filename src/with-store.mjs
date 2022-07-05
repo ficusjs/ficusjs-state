@@ -3,7 +3,7 @@ export function withStore (store, options) {
     ...options,
     created () {
       // create a subscription callback
-      this.subscribeCallback = () => {
+      this._subscribeCallback = () => {
         // clear the getter cache
         this.computedCache = {}
 
@@ -31,17 +31,17 @@ export function withStore (store, options) {
     },
     _subscribeToStores (invokeSubscribeCallback = true) {
       if (this.store && this.store.subscribe && typeof this.store.subscribe === 'function' && !this.unsubscribe) {
-        this.unsubscribe = this.store.subscribe(this.subscribeCallback)
-        if (invokeSubscribeCallback) this.subscribeCallback()
+        this.unsubscribe = this.store.subscribe(this._subscribeCallback)
+        if (invokeSubscribeCallback) this._subscribeCallback()
       } else if (this.store && typeof this.store === 'object' && !this.store.subscribe) {
         this.unsubscribe = {}
         const keys = Object.keys(this.store)
         keys.forEach(k => {
           if (this.store[k] && this.store[k].subscribe && typeof this.store[k].subscribe === 'function' && !this.unsubscribe[k]) {
-            this.unsubscribe[k] = this.store[k].subscribe(this.subscribeCallback)
+            this.unsubscribe[k] = this.store[k].subscribe(this._subscribeCallback)
           }
         })
-        if (invokeSubscribeCallback) this.subscribeCallback()
+        if (invokeSubscribeCallback) this._subscribeCallback()
       }
     },
     _unsubscribeFromStores () {

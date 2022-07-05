@@ -7,6 +7,7 @@ import { withStore } from './with-store.mjs'
 import { withXStateService } from './with-xstate-service.mjs'
 import { withWorkerStore } from './with-worker-store.mjs'
 import { Store } from './store.mjs'
+import { assign, createMachine, createXStateService, interpret } from './xstate-service.mjs'
 
 export {
   BasePersist,
@@ -19,5 +20,9 @@ export {
   withStore,
   withXStateService,
   withWorkerStore,
-  Store
+  Store,
+  assign,
+  createMachine,
+  createXStateService,
+  interpret
 }

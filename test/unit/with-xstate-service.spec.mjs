@@ -6,11 +6,13 @@ import sinon from 'sinon'
 test.beforeEach(t => {
   t.context = createWrapper(
     withXStateService({
-      status: 'Idle',
-      subscribe: sinon.stub().returns(sinon.spy()),
-      start: sinon.spy(),
-      stop: sinon.spy(),
-      send: sinon.spy()
+      _xstateService: {
+        status: 0,
+        subscribe: sinon.stub().returns(sinon.spy()),
+        start: sinon.spy(),
+        stop: sinon.spy(),
+        send: sinon.spy()
+      }
     }, {
       mounted: sinon.spy(),
       updated: sinon.spy(),
@@ -20,54 +22,50 @@ test.beforeEach(t => {
 })
 
 test('set-up subscription and start service', t => {
-  t.truthy(t.context.service.subscribe.called)
-  t.truthy(t.context.service.start.called)
+  t.truthy(t.context.fsmService._xstateService.subscribe.called)
+  t.truthy(t.context.fsmService._xstateService.start.called)
 })
 
 test('send action', t => {
   t.context.send('LOADING')
-  t.truthy(t.context.service.send.called)
-  t.is(t.context.service.send.getCall(0).args[0], 'LOADING')
-})
-
-test('stop service', t => {
-  t.context.service.status = 'Running'
-  t.context.removed()
-  t.truthy(t.context.service.stop.called)
+  t.truthy(t.context.fsmService._xstateService.send.called)
+  t.is(t.context.fsmService._xstateService.send.getCall(0).args[0], 'LOADING')
 })
 
 test('stop and start service with mounted', t => {
-  t.context.service.status = 'Running'
+  t.context.fsmService._xstateService.status = 1
   t.context.removed()
-  t.context.service.status = 'Stopped'
+  t.context.fsmService._xstateService.status = 0
   t.context.mounted()
-  t.truthy(t.context.service.start.called)
+  t.truthy(t.context.fsmService._xstateService.start.called)
 })
 
 test('stop and start service with updated', t => {
-  t.context.service.status = 'Running'
+  t.context.fsmService._xstateService.status = 1
   t.context.removed()
-  t.context.service.status = 'Stopped'
+  t.context.fsmService._xstateService.status = 0
   t.context.updated()
-  t.truthy(t.context.service.start.called)
+  t.truthy(t.context.fsmService._xstateService.start.called)
 })
 
 test('start service with updated if already running', t => {
-  t.context.service.status = 'Running'
+  t.context.fsmService._xstateService.status = 0
   t.context.updated()
-  t.truthy(t.context.service.start.called)
+  t.truthy(t.context.fsmService._xstateService.start.called)
 })
 
 test('state changes', t => {
   let subscribeCallback
   const wrapper = createWrapper(
     withXStateService({
-      status: 'Running',
-      subscribe (callback) {
-        subscribeCallback = callback
-      },
-      start () {},
-      stop () {}
+      _xstateService: {
+        status: 1,
+        subscribe (callback) {
+          subscribeCallback = callback
+        },
+        start () {},
+        stop () {}
+      }
     }, {})
   )
   wrapper._processRender = sinon.spy()
