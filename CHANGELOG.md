@@ -5,9 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.0] - 2022-06-05
+## [3.0.0] - 2022-07-06
+
+### Breaking change
+- Update component `fsm` instance
+  - move `send` method to `fsm` instance
+  - add `status` to fsm instance
+  - `fsm` instance is now a decorated XState service
 
 ### Updates
+- `withXStateService` function can except a full XState instance or one created with `createXStateService` function
+- Add `assign`, `createMachine`, `interpret` exports from the `@xstate/fsm` package
+
+### New
+- Add `xstate-service` package export based on `@xstate/fsm`
+- Add `createXStateService` function for registering global state machines
+- Add `getXStateService` function for retrieving global state machines
+- The `interpret` and `createXStateService` functions can accept getters for returning projections on extended state context
+
+## [2.0.0] - 2022-06-05
+
+### Breaking change
 - Update `@xstate/fsm` to v2.0.0
 - Update `xstate` to v4.32.1
 - Uplift devDependencies

@@ -1,3 +1,5 @@
+import { wrapXStateService, XStateServiceStatus } from './util/wrap-xstate-service.mjs'
+
 export function withXStateService (service, options) {
   return {
     ...options,
@@ -9,11 +11,8 @@ export function withXStateService (service, options) {
         // Run the render processor now that there's changes
         this._processRender()
       }
-      this._setupService(service)
+      this.setXStateService(service)
       if (options.created) options.created.call(this)
-    },
-    send (action) {
-      this.fsmService.send(action)
     },
     mounted () {
       this._subscribeToFsmService(false)
@@ -27,44 +26,31 @@ export function withXStateService (service, options) {
       this._unsubscribeFromFsmService()
       if (options.removed) options.removed.call(this)
     },
-    _wrapXStateService () {
-      return { _xstateService: service }
-    },
-    _setupService (service) {
-      service = service._xstateService ? service : this._wrapXStateService(service)
-      this.fsmService = service
-      if (service && service._xstateService && service._xstateService.subscribe && typeof service._xstateService.subscribe === 'function') {
-        const fsm = {
-          state: undefined
-        }
-        if (service.getters) {
-          fsm.getters = service.getters
-        }
-        this.fsmSubscriptionCallback = state => {
-          this.fsm.state = state
+    setXStateService (service) {
+      this.fsm = service && service.status !== XStateServiceStatus.INIT ? service : wrapXStateService(service)
+      this._fsmSubscriptionCallback = () => {
+        if (this.fsm.status === XStateServiceStatus.RUNNING && this._fsmSubscription) {
           this._subscribeCallback()
         }
-        this.fsm = fsm
-        this.send = action => this.fsmService._xstateService.send(action)
-        this._subscribeToFsmService()
       }
+      this._subscribeToFsmService()
     },
     _startFsmService () {
-      if (this.fsmService && this.fsmService._xstateService && this.fsmSubscription && this.fsmService._xstateService.status === 0) {
-        this.fsmService._xstateService.start()
+      if (this.fsm && this._fsmSubscription && this.fsm.status === XStateServiceStatus.NOT_STARTED) {
+        this.fsm.start()
       }
     },
     _subscribeToFsmService (invokeSubscribeCallback = true) {
-      if (this.fsmService && this.fsmService._xstateService && this.fsmService._xstateService.subscribe && typeof this.fsmService._xstateService.subscribe === 'function' && !this.fsmSubscription) {
-        this.fsmSubscription = this.fsmService._xstateService.subscribe(this.fsmSubscriptionCallback)
-        if (invokeSubscribeCallback) this.fsmSubscriptionCallback()
+      if (this.fsm && this.fsm.status !== XStateServiceStatus.INIT && !this._fsmSubscription) {
+        this._fsmSubscription = this.fsm.subscribe(this._fsmSubscriptionCallback)
+        if (invokeSubscribeCallback) this._fsmSubscriptionCallback()
         this._startFsmService()
       }
     },
     _unsubscribeFromFsmService () {
-      if (this.fsmService && this.fsmService._xstateService && this.fsmSubscription && typeof this.fsmSubscription === 'function') {
-        this.fsmSubscription()
-        this.fsmSubscription = null
+      if (this.fsm && this.fsm.status !== XStateServiceStatus.INIT && this._fsmSubscription && typeof this._fsmSubscription === 'function') {
+        this._fsmSubscription()
+        this._fsmSubscription = null
       }
     }
   }

@@ -1,35 +1,24 @@
-import { createMachine, interpret } from 'https://cdn.skypack.dev/xstate'
-import { createComponentWithXStateService, html } from '../util/component.mjs'
+import './fsm.mjs'
+import { createComponentWithXStateService, html, getXStateService } from '../util/component.mjs'
 
-const machine = createMachine({
-  id: 'toggle',
-  initial: 'inactive',
-  states: {
-    inactive: { on: { TOGGLE: 'active' } },
-    active: { on: { TOGGLE: 'inactive' } }
-  }
-})
-const service = interpret(machine)
-
-createComponentWithXStateService('mock-state-chart', service, {
-  mounted () {
-    console.log('mock-state-chart mounted!')
-    console.log(this.state)
-  },
+createComponentWithXStateService('mock-state-chart', getXStateService('mock.state.chart'), {
   onChange () {
-    this.send('TOGGLE')
+    this.fsm.send('TOGGLE')
   },
   render () {
-    console.log('render', this.state)
-
-    let input = html`<input type="checkbox" id="horns" name="horns" @change="${this.onChange}">`
-    if (this.state.matches('active')) {
-      input = html`<input type="checkbox" id="horns" name="horns" @change="${this.onChange}" checked>`
+    let input = html`<input type="checkbox" id="horns" name="horns" onchange="${this.onChange}">`
+    if (this.fsm.state.matches('active')) {
+      input = html`<input type="checkbox" id="horns" name="horns" onchange="${this.onChange}" checked>`
     }
-
     return html`
       ${input}
       <label for="horns">Horns</label>
     `
+  }
+})
+
+createComponentWithXStateService('mock-state-chart-view', getXStateService('mock.state.chart'), {
+  render () {
+    return html`<p>Current state: ${this.fsm.state.value}</p>`
   }
 })

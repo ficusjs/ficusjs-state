@@ -1,4 +1,5 @@
-import { assign, createMachine, interpret as interpretXState } from '@xstate/fsm/es'
+import { assign, createMachine, interpret as interpretXState } from './lib/xstate-fsm.mjs'
+import { wrapXStateService, XStateServiceStatus } from './util/wrap-xstate-service.mjs'
 
 function createGetters (service, getters) {
   service._getterCache = {}
@@ -16,17 +17,33 @@ function createGetters (service, getters) {
 }
 
 function interpret (machine, getters) {
-  const service = { _xstateService: interpretXState(machine) }
+  const service = wrapXStateService(interpretXState(machine))
   if (getters) {
     return createGetters(service, getters)
   }
   return service
 }
 
-function createXStateService (definition, options, getters) {
-  // xstate-ignore-next-line
-  const machine = createMachine(definition, options)
-  return interpret(machine, getters)
+function createXStateService (key, machine, getters) {
+  const service = interpret(machine, getters)
+  globalThis.__ficusjs__ = globalThis.__ficusjs__ || {}
+  globalThis.__ficusjs__.xstate = globalThis.__ficusjs__.xstate || {}
+  globalThis.__ficusjs__.xstate[key] = service
+  return service
 }
 
-export { assign, createMachine, createXStateService, interpret }
+function getXStateService (key) {
+  if (globalThis.__ficusjs__ && globalThis.__ficusjs__.xstate && globalThis.__ficusjs__.xstate[key]) {
+    return globalThis.__ficusjs__.xstate[key]
+  }
+}
+
+export {
+  XStateServiceStatus,
+  assign,
+  createMachine,
+  createXStateService,
+  getXStateService,
+  interpret,
+  wrapXStateService
+}
