@@ -8,10 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.0.0] - 2022-07-06
 
 ### Breaking change
-- Update component `fsm` instance
+- Update component `fsm` instance for finite state machines
   - move `send` method to `fsm` instance
   - add `status` to fsm instance
   - `fsm` instance is now a decorated XState service
+- Create worker store instances in components using `store` property
+  - `withWorkerStore` results in creation of `store` instance within components
+  - worker store dispatches called through the `store` instance
 
 ### Updates
 - `withXStateService` function can except a full XState instance or one created with `createXStateService` function

@@ -18,6 +18,7 @@ class BasePersist {
    */
   _init () {
     if ('performance' in globalThis && this.options.clearOnReload) {
+      // @ts-ignore
       const entries = globalThis.performance.getEntriesByType('navigation').map(e => e.type)
       const lastUpdated = this.lastUpdated()
       if (lastUpdated && entries.includes('reload')) {
@@ -84,8 +85,8 @@ class BasePersist {
 /**
  * Function to create persistence for the store
  * @param {string} namespace
- * @param {string} storageName
- * @param {object} options
+ * @param {string} [storageName]
+ * @param {object} [options]
  * @returns {BasePersist}
  */
 function createPersist (namespace, storageName = 'session', options) {

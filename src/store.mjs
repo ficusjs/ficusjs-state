@@ -37,6 +37,7 @@ export class Store {
     }
 
     // persistence
+    self.persist = undefined
     if (options.persist) {
       self.persist = typeof options.persist === 'string' ? createPersist(options.persist) : options.persist
 
@@ -136,7 +137,7 @@ export class Store {
 
   /**
    * A method to set state
-   * @param {Function|Promise} stateFn
+   * @param {Function} stateFn
    * @memberOf Store
    */
   setState (stateFn) {
@@ -195,6 +196,7 @@ export class Store {
         const keyArray = Array.isArray(key) ? key : key.match(/([^[.\]])+/g)
 
         // get the result
+        // @ts-ignore
         result = keyArray.reduce((prevObj, key) => prevObj && prevObj[key], this.state)
       }
 
