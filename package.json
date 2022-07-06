@@ -59,7 +59,8 @@
   "homepage": "https://github.com/ficusjs/ficusjs-state#readme",
   "standard": {
     "ignore": [
-      "*.ts"
+      "*.ts",
+      "src/lib/*"
     ]
   },
   "devDependencies": {

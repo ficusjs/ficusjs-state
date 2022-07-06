@@ -1,3 +1,4 @@
+/* istanbul ignore next */
 import { Store } from './store.mjs'
 
 globalThis.ficusjs = globalThis.ficusjs || {}

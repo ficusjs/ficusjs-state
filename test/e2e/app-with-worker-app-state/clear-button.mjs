@@ -4,7 +4,7 @@ import { worker } from './worker-store.mjs'
 createCustomElement('clear-button',
   withWorkerStore(worker, {
     clear () {
-      this.dispatch('clear')
+      this.store.dispatch('clear')
     },
     render () {
       return html`<button type="button" onclick=${this.clear}>Clear</button>`

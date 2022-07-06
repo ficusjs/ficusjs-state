@@ -8,7 +8,7 @@ import './display-button.mjs'
 createCustomElement('mock-app-with-store',
   withWorkerStore(worker, {
     mounted () {
-      this.dispatch('start')
+      this.store.dispatch('start')
     },
     render () {
       return html`<div>
