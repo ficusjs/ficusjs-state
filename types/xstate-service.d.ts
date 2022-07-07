@@ -1,4 +1,4 @@
-import { StateMachine } from '@xstate/fsm'
+import { StateMachine, EventObject, Typestate } from '@xstate/fsm'
 
 export interface XStateEvent {
   type: string
@@ -11,20 +11,20 @@ export enum XStateServiceStatus {
   STOPPED = 2
 }
 
-export interface XStateService {
+export interface XStateService<TContext extends object, TEvent extends EventObject, TState extends Typestate<TContext>> {
   status: XStateServiceStatus
-  state: StateMachine.State
+  state: StateMachine.State<TContext, TEvent, TState>
   subscribe (callback: () => void): () => void
-  send (event: StateMachine.Action): void
+  send (event: StateMachine.Action<TContext, TEvent>): void
   start (): void
 }
 
-export type XStateGetter<TContext> = (context: TContext) => Partial<TContext>
+export type XStateGetter<TContext extends object> = (context: TContext) => Partial<TContext>
 
-export interface XStateGetterTree<TContext> {
+export interface XStateGetterTree<TContext extends object> {
   [key: string]: XStateGetter<TContext>
 }
 
-export declare function createXStateService<TContext> (key: string, machine: StateMachine.Machine, getters?: XStateGetterTree<TContext>): XStateService
+export declare function createXStateService<TContext extends object, TEvent extends EventObject, TState extends Typestate<TContext>> (key: string, machine: StateMachine.Machine<TContext, TEvent, TState>, getters?: XStateGetterTree<TContext>): XStateService<TContext, TEvent, TState>
 
-export declare function getXStateService (key: string): XStateService
+export declare function getXStateService<TContext extends object, TEvent extends EventObject, TState extends Typestate<TContext>> (key: string): XStateService<TContext, TEvent, TState>

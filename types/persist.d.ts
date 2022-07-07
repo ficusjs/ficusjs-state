@@ -1,20 +1,20 @@
-export declare class BasePersist<T, P> {
-  constructor(namespace: string, storage: Window['sessionStorage'] | Window['localStorage'], options?: PersistOptions<P>)
-  setState (state: T): void
-  getState (): T
+export declare class BasePersist<TState extends object> {
+  constructor(namespace: string, storage: Window['sessionStorage'] | Window['localStorage'], options?: PersistOptions<TState>)
+  setState (state: TState): void
+  getState (): TState
   removeState (): void
 }
 
-export declare function createPersist<T>(namespace: string, storage: 'local' | 'session', options?: PersistOptions<T>): void
+export declare function createPersist<TState extends object>(namespace: string, storage: 'local' | 'session', options?: PersistOptions<TState>): void
 
-export interface PersistOptions<T> {
+export interface PersistOptions<TState extends object> {
   clearOnReload: boolean
-  saveState: (state) => T
+  saveState: (state) => Partial<TState>
 }
 
-export interface Persist<TS> {
+export interface Persist<TState extends object> {
   constructor(namespace: string)
-  setState (state: TS): void
-  getState (): TS
+  setState (state: TState): void
+  getState (): TState
   removeState (): void
 }

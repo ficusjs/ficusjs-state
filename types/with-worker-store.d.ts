@@ -1,7 +1,9 @@
 import { CustomElementOptions } from '@ficusjs/core'
 
-export interface FicusComponentWithWorkerStore<T> extends HTMLElement {
-  dispatch: (actionName: string, payload: T) => void
+export interface FicusComponentWithWorkerStore<TPayload> extends HTMLElement {
+  store: {
+    dispatch: (actionName: string, payload: TPayload) => void
+  }
 }
 
-export declare function withWorkerStore<TCO> (worker: Worker, options: CustomElementOptions<TCO>)
+export declare function withWorkerStore<TContent> (worker: Worker, options: CustomElementOptions<TContent>)
