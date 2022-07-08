@@ -5,13 +5,15 @@ function createGetters (service, getters) {
   service._getterCache = {}
   service.getters = new Proxy(getters, {
     get (getters, key) {
-      // check the getter cache first
       if (!service._getterCache[key]) {
         const result = getters[key](service._xstateService.state.context)
         service._getterCache[key] = result
       }
       return service._getterCache[key]
     }
+  })
+  service.subscribe(() => {
+    service._getterCache = {}
   })
   return service
 }

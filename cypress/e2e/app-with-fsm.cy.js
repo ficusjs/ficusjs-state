@@ -1,7 +1,7 @@
 /* global describe cy before it  */
 describe('App fsm', () => {
   before(() => {
-    cy.visit('app-with-fsm/')
+    cy.visit('app-with-fsm')
   })
 
   it('has an add water button', () => {
@@ -14,10 +14,10 @@ describe('App fsm', () => {
       .should('have.text', 'You have filled 0 times!')
   })
 
-  function incrementing (expecting) {
-    describe('incrementing', () => {
+  function filling (expecting) {
+    describe('adding water', () => {
       before(() => {
-        cy.get('add-water-button mosaic-button').click()
+        cy.get('add-water-button button').click()
       })
 
       it('should display water level', () => {
@@ -39,5 +39,5 @@ describe('App fsm', () => {
     'You have filled 9 times!',
     'The glass is full!',
     'The glass is full!'
-  ].forEach(e => incrementing(e))
+  ].forEach(e => filling(e))
 })

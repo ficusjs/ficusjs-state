@@ -46,6 +46,10 @@ const options = {
 const getters = {
   isGlassFull (context) {
     return context.amount >= 10
+  },
+  remaining (context) {
+    if (context.amount === 10) return 0
+    return 10 - context.amount
   }
 }
 

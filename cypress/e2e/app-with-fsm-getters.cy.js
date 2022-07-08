@@ -1,7 +1,7 @@
 /* global describe cy before it  */
 describe('App fsm getters', () => {
   before(() => {
-    cy.visit('app-with-fsm-getters/')
+    cy.visit('app-with-fsm-getters')
   })
 
   it('has an add water button', () => {
@@ -11,13 +11,13 @@ describe('App fsm getters', () => {
 
   it('should display water level', () => {
     cy.get('display-button')
-      .should('have.text', 'You have not filled the glass yet, keep going!')
+      .should('have.text', 'You have not filled the glass yet, keep going! (there are 10 fills to go!)')
   })
 
-  function incrementing (expecting) {
-    describe('incrementing', () => {
+  function filling (expecting) {
+    describe('adding water', () => {
       before(() => {
-        cy.get('add-water-button mosaic-button').click()
+        cy.get('add-water-button button').click()
       })
 
       it('should display water level', () => {
@@ -28,16 +28,16 @@ describe('App fsm getters', () => {
   }
 
   [
-    'You have not filled the glass yet, keep going!',
-    'You have not filled the glass yet, keep going!',
-    'You have not filled the glass yet, keep going!',
-    'You have not filled the glass yet, keep going!',
-    'You have not filled the glass yet, keep going!',
-    'You have not filled the glass yet, keep going!',
-    'You have not filled the glass yet, keep going!',
-    'You have not filled the glass yet, keep going!',
-    'You have not filled the glass yet, keep going!',
+    'You have not filled the glass yet, keep going! (there are 9 fills to go!)',
+    'You have not filled the glass yet, keep going! (there are 8 fills to go!)',
+    'You have not filled the glass yet, keep going! (there are 7 fills to go!)',
+    'You have not filled the glass yet, keep going! (there are 6 fills to go!)',
+    'You have not filled the glass yet, keep going! (there are 5 fills to go!)',
+    'You have not filled the glass yet, keep going! (there are 4 fills to go!)',
+    'You have not filled the glass yet, keep going! (there are 3 fills to go!)',
+    'You have not filled the glass yet, keep going! (there are 2 fills to go!)',
+    'You have not filled the glass yet, keep going! (there are 1 fills to go!)',
     'The glass is full!',
     'The glass is full!'
-  ].forEach(e => incrementing(e))
+  ].forEach(e => filling(e))
 })
