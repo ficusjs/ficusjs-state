@@ -34,6 +34,13 @@ function createXStateService (key, machine, getters) {
   return service
 }
 
+function addXStateService (key, service) {
+  globalThis.__ficusjs__ = globalThis.__ficusjs__ || {}
+  globalThis.__ficusjs__.xstate = globalThis.__ficusjs__.xstate || {}
+  globalThis.__ficusjs__.xstate[key] = service
+  return service
+}
+
 function getXStateService (key) {
   if (globalThis.__ficusjs__ && globalThis.__ficusjs__.xstate && globalThis.__ficusjs__.xstate[key]) {
     return globalThis.__ficusjs__.xstate[key]
@@ -42,6 +49,7 @@ function getXStateService (key) {
 
 export {
   XStateServiceStatus,
+  addXStateService,
   assign,
   createMachine,
   createXStateService,

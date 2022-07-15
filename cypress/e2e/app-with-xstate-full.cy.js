@@ -1,0 +1,43 @@
+/* global describe cy before it  */
+describe('App with XState full version', () => {
+  before(() => {
+    cy.visit('app-with-xstate-full')
+  })
+
+  it('has an add water button', () => {
+    cy.get('add-water-button')
+      .should('exist')
+  })
+
+  it('should display water level', () => {
+    cy.get('display-button')
+      .should('have.text', 'You have filled 0 times!')
+  })
+
+  function filling (expecting) {
+    describe('adding water', () => {
+      before(() => {
+        cy.get('add-water-button button').click()
+      })
+
+      it('should display water level', () => {
+        cy.get('display-button')
+          .should('have.text', expecting)
+      })
+    })
+  }
+
+  [
+    'You have filled 1 times!',
+    'You have filled 2 times!',
+    'You have filled 3 times!',
+    'You have filled 4 times!',
+    'You have filled 5 times!',
+    'You have filled 6 times!',
+    'You have filled 7 times!',
+    'You have filled 8 times!',
+    'You have filled 9 times!',
+    'The glass is full!',
+    'The glass is full!'
+  ].forEach(e => filling(e))
+})
