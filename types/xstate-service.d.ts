@@ -25,6 +25,8 @@ export interface XStateGetterTree<TContext extends object> {
   [key: string]: XStateGetter<TContext>
 }
 
+export declare function addXStateService<TContext extends object, TEvent extends EventObject, TState extends Typestate<TContext>> (key: string, service: XStateService<TContext, TEvent, TState>): XStateService<TContext, TEvent, TState>
+
 export declare function createXStateService<TContext extends object, TEvent extends EventObject, TState extends Typestate<TContext>> (key: string, machine: StateMachine.Machine<TContext, TEvent, TState>, getters?: XStateGetterTree<TContext>): XStateService<TContext, TEvent, TState>
 
 export declare function getXStateService<TContext extends object, TEvent extends EventObject, TState extends Typestate<TContext>> (key: string): XStateService<TContext, TEvent, TState>
