@@ -5,7 +5,7 @@ export declare class BasePersist<TState extends object> {
   removeState (): void
 }
 
-export declare function createPersist<TState extends object>(namespace: string, storage: 'local' | 'session', options?: PersistOptions<TState>): void
+export declare function createPersist<TState extends object>(namespace: string, storage: 'local' | 'session', options?: PersistOptions<TState>): Persist<TState>
 
 export interface PersistOptions<TState extends object> {
   clearOnReload: boolean
