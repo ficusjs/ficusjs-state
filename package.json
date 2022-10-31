@@ -1,6 +1,6 @@
 {
   "name": "@ficusjs/state",
-  "version": "3.4.0",
+  "version": "3.4.1",
   "description": "State functions for FicusJS",
   "type": "module",
   "main": "dist/index.mjs",
@@ -66,7 +66,7 @@
   "dependencies": {
     "@ficusjs/core": "2.1.0",
     "@xstate/fsm": "2.0.0",
-    "xstate": "4.33.6"
+    "xstate": "4.34.0"
   },
   "devDependencies": {
     "ava": "5.0.1",
@@ -77,9 +77,9 @@
     "@rollup/plugin-node-resolve": "15.0.1",
     "@xstate/fsm": "2.0.0",
     "c8": "7.12.0",
-    "cypress": "10.10.0",
+    "cypress": "10.11.0",
     "http-server": "14.1.1",
-    "jsdom": "20.0.1",
+    "jsdom": "20.0.2",
     "ncp": "2.0.0",
     "node-sessionstorage": "1.0.0",
     "npm-run-all": "4.1.5",
@@ -90,7 +90,7 @@
     "sinon": "14.0.1",
     "standard": "16.0.4",
     "start-server-and-test": "1.14.0",
-    "xstate": "4.33.6"
+    "xstate": "4.34.0"
   },
   "exports": {
     ".": {
