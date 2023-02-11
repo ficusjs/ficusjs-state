@@ -1,4 +1,4 @@
-/* global describe cy before it  */
+/* global describe cy before it expect */
 describe('App state', () => {
   before(() => {
     cy.visit('app-with-app-state')
@@ -37,6 +37,18 @@ describe('App state', () => {
     it('resets the output count to 0', () => {
       cy.get('display-button')
         .should('have.text', 'You have clicked 0 times! 0 * 10 = 0, 0 * 20 = 0')
+    })
+  })
+
+  describe('lifecycle order', () => {
+    it('mounted lifecycle method should be called after created', () => {
+      cy.get('mock-app-with-store')
+        .then(([$component]) => {
+          const [firstMethod, secondMethod] = $component.lifecycleTracker
+          expect(firstMethod.name).to.equal('created')
+          expect(secondMethod.name).to.equal('mounted')
+          expect(firstMethod.timeStamp).to.be.lessThan(secondMethod.timeStamp)
+        })
     })
   })
 })
