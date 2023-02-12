@@ -8,7 +8,7 @@ export function withStore (store, options) {
         this.computedCache = {}
 
         // Run the render processor now that there's changes
-        this._processRender()
+        this.isCreatedCalled && this._processRender()
       }
       this.setStore(store)
       if (options.created) options.created.call(this)

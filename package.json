@@ -1,6 +1,6 @@
 {
   "name": "@ficusjs/state",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "description": "State functions for FicusJS",
   "type": "module",
   "main": "dist/index.mjs",
