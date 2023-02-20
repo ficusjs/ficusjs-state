@@ -66,7 +66,7 @@
   "dependencies": {
     "@ficusjs/core": "3.1.2",
     "@xstate/fsm": "2.0.0",
-    "xstate": "4.35.4"
+    "xstate": "4.36.0"
   },
   "devDependencies": {
     "ava": "5.2.0",
@@ -90,7 +90,7 @@
     "sinon": "15.0.1",
     "standard": "16.0.4",
     "start-server-and-test": "1.15.3",
-    "xstate": "4.35.4"
+    "xstate": "4.36.0"
   },
   "exports": {
     ".": {
