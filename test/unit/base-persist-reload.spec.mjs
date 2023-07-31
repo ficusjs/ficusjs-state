@@ -2,8 +2,6 @@ import test from 'ava'
 import sinon from 'sinon'
 import { createPersist } from '../../src/index.mjs'
 
-let persist
-
 test.beforeEach(t => {
   const getItem = sinon.stub()
   getItem.withArgs('test:lastUpdated').returns('10')
@@ -23,7 +21,7 @@ test('set state', t => {
       ]
     }
   }
-  persist = createPersist('test', 'local', {
+  createPersist('test', 'local', {
     clearOnReload: true
   })
   t.truthy(globalThis.localStorage.getItem.called)
