@@ -78,7 +78,7 @@
     "@rollup/plugin-terser": "^0.4.3",
     "@xstate/fsm": "2.1.0",
     "c8": "8.0.1",
-    "cypress": "12.17.2",
+    "cypress": "13.1.0",
     "http-server": "14.1.1",
     "jsdom": "22.1.0",
     "ncp": "2.0.0",
